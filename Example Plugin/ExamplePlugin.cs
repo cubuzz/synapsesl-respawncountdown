@@ -1,12 +1,19 @@
 ﻿using Synapse;
+using Synapse.Api.Plugin;
 using System.Collections.Generic;
 
 namespace Example_Plugin
 {
+    [PluginDetails(
+        Author = "Dimenzio",
+        Description = "An Example Plugin",
+        Name = "ExamplePlugin",
+        Version = "1.0",
+        SynapseMajor = 1,
+        SynapseMinor = 0
+        )]
     public class ExamplePlugin : Plugin
     {
-        public override string GetName => "ExamplePlugin";
-
         public string JoinMessage;
         public string EmptyException;
 
