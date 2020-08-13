@@ -8,10 +8,10 @@ namespace Example_Plugin
         Author = "Dimenzio",
         Description = "An Example Plugin",
         Name = "ExamplePlugin",
-        Version = "1.1.2",
+        Version = "1.2.0",
         SynapseMajor = 1,
-        SynapseMinor = 1,
-        SynapsePatch = 2
+        SynapseMinor = 2,
+        SynapsePatch = 0
         )]
     public class ExamplePlugin : Plugin
     {
