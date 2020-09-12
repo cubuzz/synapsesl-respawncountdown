@@ -1,58 +1,59 @@
-﻿using Synapse;
+﻿using MEC;
+using Synapse.Api;
 using Synapse.Api.Plugin;
 using System.Collections.Generic;
 
 namespace Example_Plugin
 {
-    [PluginDetails(
+    [PluginInformations(
         Author = "Dimenzio",
-        Description = "An Example Plugin",
+        Description = "Example",
+        LoadPriority = int.MaxValue,
         Name = "ExamplePlugin",
-        Version = "1.3.0",
-        SynapseMajor = 1,
-        SynapseMinor = 3,
-        SynapsePatch = 0
+        SynapseMajor = 2,
+        SynapseMinor = 0,
+        SynapsePatch = 0,
+        Version = "2.0.0"
         )]
-    public class ExamplePlugin : Plugin
+    public class ExamplePlugin
     {
-        public string JoinMessage;
-        public string EmptyException;
-
-        public bool Enabled;
-        public string Tag;
-        public ushort Duration;
-
-        public EventHandlers EventHandlers;
-
-        public override void OnEnable()
+        public ExamplePlugin(PluginExtension pe)
         {
-            //CreateConfigs
-            ReloadConfigs();
-            this.ConfigReloadEvent += ReloadConfigs;
+            SynapseController.Server.Logger.Info("ExamplePlugin!");
 
-            //Hook Events
-            EventHandlers = new EventHandlers(this);
+            SynapseController.Server.Events.Player.LoadComponentsEvent += LoadComp;
         }
 
-        public void ReloadConfigs()
+        private void LoadComp(Synapse.Api.Events.SynapseEventArguments.LoadComponentEventArgs ev)
         {
-            Log.Info("Reloading Configs...");
+            if (ev.Player == null)
 
-            Enabled = Plugin.Config.GetBool("example_enabled",true);
-            Tag = Plugin.Config.GetString("example_nametag", "[Example]");
-            Duration = Plugin.Config.GetUShort("example_duration", 5);
+            SynapseController.Server.Logger.Info("load");
 
-            //CreateTranslation
-            var translations = new Dictionary<string, string>()
+            foreach (var tesla in SynapseController.Server.Map.Elevators)
+                SynapseController.Server.Logger.Info(tesla.GameObject.name);
+
+            foreach (var tesla in SynapseController.Server.Map.Doors)
+                SynapseController.Server.Logger.Info(tesla.GameObject.name);
+
+            foreach (var tesla in SynapseController.Server.Map.Teslas)
+                SynapseController.Server.Logger.Info(tesla.GameObject.name);
+
+            foreach (var room in SynapseController.Server.Map.Rooms)
+                SynapseController.Server.Logger.Info(room.GameObject.name + ": " + room.Position + ":   "+ room.Zone + ": " + room.RoomType);
+
+            //Timing.RunCoroutine(Show(ev.Player.GetPlayer()));
+        }
+
+        private IEnumerator<float> Show(Player player)
+        {
+            yield return Timing.WaitForSeconds(30f);
+            for(; ; )
             {
-                {"join", "Your name was changed!"},
-                { "empty", "The Config was empty so youre name wasnt changed"}
-            };
-
-            this.Translation.CreateTranslations(translations);
-
-            JoinMessage = this.Translation.GetTranslation("join");
-            EmptyException = this.Translation.GetTranslation("empty");
+                yield return Timing.WaitForSeconds(5f);
+                if (player.LookingAt != null)
+                    SynapseController.Server.Logger.Info(player.LookingAt.name);
+            }
         }
     }
 }
