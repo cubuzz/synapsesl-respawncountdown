@@ -21,7 +21,7 @@ namespace Example_Plugin
 
         public override void Load()
         {
-            SynapseController.Server.Logger.Info("Exampel Plugin Load");
+            SynapseController.Server.Logger.Info("Example Plugin Load");
             var dict = new Dictionary<string, string>()
             {
                 {"translation1","Some Translation" }
