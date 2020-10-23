@@ -1,13 +1,10 @@
-﻿using System;
-using MEC;
-using Synapse.Api.Plugin;
+﻿using Synapse.Api.Plugin;
 using System.Collections.Generic;
-using Synapse.Config;
 using Synapse.Api;
 
 namespace Example_Plugin
 {
-    [PluginInformations(
+    [PluginInformation(
         Author = "Dimenzio",
         Description = "Example",
         LoadPriority = int.MaxValue,
