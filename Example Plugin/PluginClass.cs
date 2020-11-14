@@ -7,7 +7,7 @@ namespace Example_Plugin
     [PluginInformation(
         Author = "Dimenzio",
         Description = "Example",
-        LoadPriority = int.MaxValue,
+        LoadPriority = int.MinValue,
         Name = "ExamplePlugin",
         SynapseMajor = 2,
         SynapseMinor = 0,
