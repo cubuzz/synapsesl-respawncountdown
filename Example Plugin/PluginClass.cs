@@ -28,6 +28,8 @@ namespace Example_Plugin
             };
             Translation.CreateTranslations(dict);
             Logger.Get.Info(this.Translation.GetTranslation("translation1"));
+
+            new EventHandlers();
         }
 
         //This Method is only needed if you want to reload anything(Translation and Config will be reloaded by Synapse!)
