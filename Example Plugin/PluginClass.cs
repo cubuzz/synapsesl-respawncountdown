@@ -10,7 +10,7 @@ namespace Example_Plugin
         LoadPriority = int.MinValue,
         Name = "ExamplePlugin",
         SynapseMajor = 2,
-        SynapseMinor = 0,
+        SynapseMinor = 2,
         SynapsePatch = 0,
         Version = "2.0.0"
         )]
