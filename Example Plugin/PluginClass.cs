@@ -7,17 +7,17 @@ namespace Example_Plugin
     [PluginInformation(
         Author = "Dimenzio",
         Description = "Example",
-        LoadPriority = int.MinValue,
+        LoadPriority = 0,
         Name = "ExamplePlugin",
         SynapseMajor = 2,
-        SynapseMinor = 2,
+        SynapseMinor = 4,
         SynapsePatch = 0,
         Version = "2.0.0"
         )]
     public class PluginClass : AbstractPlugin
     {
-        [Synapse.Api.Plugin.Config(section = "Example Plugin2")]
-        public static Config Config;
+        [Config(section = "Example Plugin2")]
+        public static PluginConfig Config;
 
         public override void Load()
         {

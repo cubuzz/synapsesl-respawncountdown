@@ -2,7 +2,7 @@
 
 namespace Example_Plugin
 {
-    public class Config : IConfigSection
+    public class PluginConfig : IConfigSection
     {
         public string consoleMessage = "Hello World";
     }
