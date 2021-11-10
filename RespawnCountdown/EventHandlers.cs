@@ -1,11 +1,13 @@
 ﻿using MEC;
 using Synapse;
 using Synapse.Command;
+using Synapse.Translation;
 using System;
 using System.Collections.Generic;
 
 namespace cRespawnCountdown
 {
+
     [CommandInformation(
         Name = "rc.t",
         Aliases = new string[] {""},
@@ -14,6 +16,7 @@ namespace cRespawnCountdown
         Platforms = new[] {Platform.RemoteAdmin, Platform.ServerConsole},
         Usage = "Toggles RespawnCountdown on or off."
         )]
+    
     class ToggleCommand : ISynapseCommand
     {
         public CommandResult Execute(CommandContext ctx)
@@ -57,9 +60,12 @@ namespace cRespawnCountdown
         List<CoroutineHandle> Coroutines = new List<CoroutineHandle>();
         List<Synapse.Api.Player> DeadPlayers = new List<Synapse.Api.Player>();
         bool isRespawning = false;
+        
+        private SynapseTranslation<PluginTranslation> Translation;
 
-        public EventHandlers()
+        public EventHandlers(SynapseTranslation<PluginTranslation> ActiveTranslation)
         {
+            Translation = ActiveTranslation;
             //You can also use SynapseController.Server to get the Server!
             Server.Get.Events.Round.WaitingForPlayersEvent += CleanUp;
             Server.Get.Events.Round.RoundStartEvent += OnStart;
@@ -72,7 +78,6 @@ namespace cRespawnCountdown
 
         private void Disconnect(Synapse.Api.Events.SynapseEventArguments.PlayerLeaveEventArgs args)
         {
-            Server.Get.Logger.Warn("A player has disconnected.");
             DeadPlayers.Remove(args.Player);
         }
 
@@ -87,7 +92,7 @@ namespace cRespawnCountdown
         }
 
         private void OnEnd() {
-            Server.Get.Logger.Warn("Requested killing all coroutines...");
+            Server.Get.Logger.Warn("[RC] Requested killing all coroutines, and it's likely not going to work. Trying anyway :)");
             Timing.KillCoroutines(Coroutines.ToArray());
         }
 
@@ -126,13 +131,13 @@ namespace cRespawnCountdown
         
         private IEnumerator<float> RespawnCountdown()
         {
-            Server.Get.Logger.Info("Registered coroutine. We're ready to roll.");
+            Server.Get.Logger.Info("[RC] Registered coroutine. We're ready to roll.");
             while (PluginClass.Config.Enabled)
             {
                 if (nextRespawnDue < 0)
                 {
                     nextRespawnDue = Server.Get.Map.Round.NextRespawn;
-                    Server.Get.Logger.Warn(nextRespawnDue);
+                    // Server.Get.Logger.Warn(nextRespawnDue);
                     // Is the next respawn in less than 20 seconds?
                     isRespawning = (20 > nextRespawnDue);
                 }
@@ -149,14 +154,14 @@ namespace cRespawnCountdown
                 {
                     foreach (Synapse.Api.Player player in DeadPlayers)
                     {
-                    
+
                         if (isRespawning)
                         {
-                            player.SendBroadcast(1, $"<color=yellow><size=28><i>Mach dich bereit!\n{(respawnIn).ToString("##0.0")}</i></size></color>", true);
+                            player.SendBroadcast(1, $"<color=yellow><size=28><i>{Translation.ActiveTranslation.GetReady}\n{(respawnIn).ToString("##0.0")}</i></size></color>", true);
                         }
                         else
                         {
-                            player.SendBroadcast(1, $"<size=30><i>Nächster Respawn in: <b><color=#df2222>{(respawnIn + 12).ToString("##0")} Sekunden</color></b>.</i></size>\n<size=30><i><b><color=blue>NTF:</color> {Server.Get.Map.Round.MtfTickets}</b></i><color=#666666> | </color><i><b><color=green>CI:</color> {Server.Get.Map.Round.ChaosTickets}</b></i></size>", true);
+                            player.SendBroadcast(1, $"<size=30><i>{Translation.ActiveTranslation.RespawnIn}: <b><color=#df2222>{(respawnIn + 12).ToString("##0")} {Translation.ActiveTranslation.Seconds}</color></b>.</i></size>\n<size=30><i><b><color=blue>NTF:</color> {Server.Get.Map.Round.MtfTickets}</b></i><color=#666666> | </color><i><b><color=green>CI:</color> {Server.Get.Map.Round.ChaosTickets}</b></i></size>", true);
                         }
                     
                     }
