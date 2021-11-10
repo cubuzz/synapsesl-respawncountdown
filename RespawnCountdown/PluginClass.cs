@@ -7,7 +7,7 @@ namespace cRespawnCountdown
     public class PluginTranslation : IPluginTranslation
     {
         public String RespawnIn { get; set; } = "Next respawn in";
-        public String Seconds { get; set; } = " seconds";
+        public String Seconds { get; set; } = "seconds";
         public String GetReady { get; set; } = "Get ready!";
     }
 
